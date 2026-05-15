@@ -1,37 +1,33 @@
 import { useState } from 'react';
 
 function ProjectForm({ onAddProject }) {
-  const [formData, setFormData] = useState({ title: '', description: '' });
+  const [title, setTitle] = useState('');
+  const [desc, setDesc] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.description) return;
-    onAddProject(formData);
-    setFormData({ title: '', description: '' }); // Reset form
+    if (!title.trim()) return alert("Title is required!");
+    
+    onAddProject({ title, description: desc });
+    setTitle('');
+    setDesc('');
   };
 
   return (
-    <section className="form-section">
-      <h2>Add Project</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="input-group">
-          <label>Title</label>
-          <input 
-            type="text" 
-            value={formData.title}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
-          />
-        </div>
-        <div className="input-group">
-          <label>Description</label>
-          <textarea 
-            value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-          ></textarea>
-        </div>
-        <button type="submit">Add</button>
-      </form>
-    </section>
+    <form className="cool-form" onSubmit={handleSubmit}>
+      <h3>New Masterpiece</h3>
+      <input 
+        placeholder="Project Title" 
+        value={title} 
+        onChange={e => setTitle(e.target.value)} 
+      />
+      <textarea 
+        placeholder="Brief description..." 
+        value={desc} 
+        onChange={e => setDesc(e.target.value)}
+      />
+      <button type="submit">Deploy Project</button>
+    </form>
   );
 }
 

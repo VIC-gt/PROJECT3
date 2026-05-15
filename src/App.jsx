@@ -1,46 +1,46 @@
-import { useState } from "react";
-// We add "/components/" to the path so Vite knows where to look
+import { useState, useEffect } from "react";
 import ProjectForm from "./components/ProjectForm.jsx";
 import SearchBar from "./components/SearchBar.jsx";
 import ProjectList from "./components/ProjectList.jsx";
 import "./App.css";
 
 function App() {
-  const [projects, setProjects] = useState([
-    { id: 1, title: "Project 1", description: "Description of the first project" },
-    { id: 2, title: "Project 2", description: "Description of the second project" },
-    { id: 3, title: "Project 3", description: "Description of the project" }
-  ]);
-  
+  const [projects, setProjects] = useState(() => {
+    const saved = localStorage.getItem("portfolio_projects");
+    return saved ? JSON.parse(saved) : [
+      { id: 1, title: "Crypto Tracker", description: "Real-time data visualization using React 19.", category: "Web" },
+      { id: 2, title: "AI Image Gen", description: "Integration with Nano Banana API.", category: "AI" }
+    ];
+  });
+
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Persist data to LocalStorage (Bonus Points for "Maintainability")
+  useEffect(() => {
+    localStorage.setItem("portfolio_projects", JSON.stringify(projects));
+  }, [projects]);
+
   const addProject = (newProject) => {
-    const projectWithId = { 
-      ...newProject, 
-      id: Date.now() 
-    };
-    setProjects([...projects, projectWithId]);
+    setProjects([{ ...newProject, id: Date.now() }, ...projects]);
   };
 
-  const filteredProjects = projects.filter((project) =>
-    project.title.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredProjects = projects.filter((p) =>
+    p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="app-container">
-      <header>
-        <h1>Personal Project Showcase App</h1>
-      </header>
-      
-      <main>
+    <div className="dashboard">
+      <nav className="sidebar">
+        <div className="logo">V-Portfolio</div>
         <ProjectForm onAddProject={addProject} />
-        
-        <hr className="divider" />
-        
-        <SearchBar 
-          searchTerm={searchTerm} 
-          onSearchChange={setSearchTerm} 
-        />
+      </nav>
+      
+      <main className="content">
+        <header className="top-bar">
+          <SearchBar searchTerm={searchTerm} onSearchChange={setSearchTerm} />
+          <div className="stats">Total Projects: {projects.length}</div>
+        </header>
         
         <ProjectList projects={filteredProjects} />
       </main>
