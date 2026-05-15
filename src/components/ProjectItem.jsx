@@ -9,5 +9,4 @@ function ProjectItem({ project }) {
     </div>
   );
 }
-
 export default ProjectItem;

@@ -1,6 +1,17 @@
-// ProjectList.jsx
-import ProjectItem from './ProjectItem';
+// 1. The helper component (No "export default" here!)
+function ProjectItem({ project }) {
+  return (
+    <div className="project-card">
+      <div className="placeholder-icon">X</div>
+      <div className="project-info">
+        <h3>{project.title}</h3>
+        <p>{project.description}</p>
+      </div>
+    </div>
+  );
+}
 
+// 2. The main component
 function ProjectList({ projects }) {
   return (
     <div className="project-list">
@@ -15,19 +26,5 @@ function ProjectList({ projects }) {
   );
 }
 
+// 3. ONLY ONE default export allowed per file
 export default ProjectList;
-
-// ProjectItem.jsx
-function ProjectItem({ project }) {
-  return (
-    <div className="project-card">
-      <div className="placeholder-icon">X</div>
-      <div className="project-info">
-        <h3>{project.title}</h3>
-        <p>{project.description}</p>
-      </div>
-    </div>
-  );
-}
-
-export default ProjectItem;
